@@ -8,7 +8,7 @@ from transformers import (
     TrainingArguments,
 )
 from peft import LoraConfig
-from trl import SFTTrainer
+from trl import SFTTrainer, SFTConfig
 
 # Configuration
 MODEL_NAME = "deepseek-ai/deepseek-coder-1.3b-instruct"
@@ -22,17 +22,9 @@ OUTPUT_DIR = "output"
 def train():
     print(f"Loading model: {MODEL_NAME}")
     
-    # Quantization config
-    bnb_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.float16,
-    )
-
     # Load model
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
-        quantization_config=bnb_config,
         device_map="auto",
         trust_remote_code=True
     )
@@ -56,7 +48,7 @@ def train():
     dataset = load_dataset("json", data_files=DATA_PATH, split="train")
 
     # Training arguments
-    training_args = TrainingArguments(
+    training_args = SFTConfig(
         output_dir=OUTPUT_DIR,
         per_device_train_batch_size=4,
         gradient_accumulation_steps=4,
@@ -66,6 +58,9 @@ def train():
         save_steps=25,
         fp16=True,
         optim="paged_adamw_32bit",
+        dataset_text_field="output", # Using output as the text field for now
+        max_seq_length=512,
+        packing=False,
     )
 
     # Trainer
@@ -73,11 +68,8 @@ def train():
         model=model,
         train_dataset=dataset,
         peft_config=peft_config,
-        dataset_text_field="output", # Using output as the text field for now, ideally should format instruction+input+output
-        max_seq_length=512,
         tokenizer=tokenizer,
         args=training_args,
-        packing=False,
     )
 
     print("Starting training...")
