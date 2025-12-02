@@ -62,10 +62,20 @@ def train():
         max_steps=50, # Short run for demo/testing
         fp16=False,
         optim="adamw_torch",
-        dataset_text_field="output", # Using output as the text field for now
+        dataset_text_field="text",
         max_length=512,
         packing=False,
     )
+
+    def formatting_prompts_func(example):
+        output_texts = []
+        for i in range(len(example['instruction'])):
+            text = f"### Instruction:\n{example['instruction'][i]}\n\n### Response:\n{example['output'][i]}"
+            output_texts.append(text)
+        return {"text": output_texts}
+
+    # Apply formatting manually
+    dataset = dataset.map(formatting_prompts_func, batched=True)
 
     # Trainer
     trainer = SFTTrainer(
