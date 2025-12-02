@@ -15,7 +15,12 @@ MODEL_NAME = "deepseek-ai/deepseek-coder-1.3b-instruct"
 DATA_PATH = [
     "data/processed/bonus_data.jsonl",
     "data/processed/absence_data.jsonl",
-    "data/processed/overtime_data.jsonl"
+    "data/processed/overtime_data.jsonl",
+    "data/processed/deduction_data.jsonl",
+    "data/processed/earning_data.jsonl",
+    "data/processed/benefit_eligibility_data.jsonl",
+    "data/processed/time_validation_data.jsonl",
+    "data/processed/advanced_syntax_data.jsonl"
 ]
 OUTPUT_DIR = "output"
 
@@ -55,9 +60,8 @@ def train():
         learning_rate=2e-4,
         logging_steps=10,
         max_steps=50, # Short run for demo/testing
-        save_steps=25,
-        fp16=True,
-        optim="paged_adamw_32bit",
+        fp16=False,
+        optim="adamw_torch",
         dataset_text_field="output", # Using output as the text field for now
         max_length=512,
         packing=False,
