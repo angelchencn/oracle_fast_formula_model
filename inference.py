@@ -4,7 +4,7 @@ from peft import PeftModel
 
 # Configuration
 BASE_MODEL = "deepseek-ai/deepseek-coder-1.3b-instruct"
-ADAPTER_PATH = "oracle_fast_formula_model/output"
+ADAPTER_PATH = "output"
 
 def generate_code(instruction):
     print("Loading model...")
