@@ -59,7 +59,7 @@ def train():
         fp16=True,
         optim="paged_adamw_32bit",
         dataset_text_field="output", # Using output as the text field for now
-        max_seq_length=512,
+        max_length=512,
         packing=False,
     )
 
