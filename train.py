@@ -13,11 +13,11 @@ from trl import SFTTrainer
 # Configuration
 MODEL_NAME = "deepseek-ai/deepseek-coder-1.3b-instruct"
 DATA_PATH = [
-    "oracle_fast_formula_model/data/processed/bonus_data.jsonl",
-    "oracle_fast_formula_model/data/processed/absence_data.jsonl",
-    "oracle_fast_formula_model/data/processed/overtime_data.jsonl"
+    "data/processed/bonus_data.jsonl",
+    "data/processed/absence_data.jsonl",
+    "data/processed/overtime_data.jsonl"
 ]
-OUTPUT_DIR = "oracle_fast_formula_model/output"
+OUTPUT_DIR = "output"
 
 def train():
     print(f"Loading model: {MODEL_NAME}")
